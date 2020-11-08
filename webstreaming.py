@@ -1,6 +1,9 @@
 from flask import Flask, render_template, Response, request
 import requests
 import cv2
+import numpy as np
+from .models.detect import detect
+#from .models.MaskDetection.detect import detection
 
 
 app = Flask(__name__)
@@ -14,28 +17,22 @@ def index():
     return render_template("index.html")
 
 
-def gen(image):
+def gen():
     while True:
-        # byte문자열인 image를 0.jpg로 저장후
-        cv2.imwrite("./0.jpg", image)
-        # 0.jpg를 capture
-        cap = cv2.VideoCapture("./0.jpg")
-        # capture한 이미지를 읽기
-        success, cap = image.read()
-        if not success:
-            break
-        else:
-            ret, buffer = cv2.imencode(".jpg", frame)
-            frame = buffer.tobytes()
-            yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n")
+        try:
+            res = requests.get("http://{}:5000/".format(client_ip)).content
+            # Mask detection & convention
+            result = detect(res)
+            yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
+        except Exception as err:
+            print("ERROR MSG:[{}]".format(err))
 
 
 @app.route("/video_feed")
 def video_feed():
     # 요청을 보냈던 client의 Ip로 이미지 수신
-    video = requests.get(client_ip)
-    return Response(gen(video), mimetype="multipart/x-mixed-replace; boundary=frame")
+    return Response(gen(), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)
