@@ -1,20 +1,48 @@
-<html>
+<!DOCTYPE html>
+<html lang="ko">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shame-on-you</title>
-    <link href="{{ url_for('static', filename='index.css') }}" rel="stylesheet">
-      <script src="{{ url_for('static', filename='script.js') }}" />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      
+    </script>
   </head>
   <body>
-    <div class="modes">
-      <img id="mainVideo" src="{{url_for('video_feed')}}" alt="">
+    <div class="warp">
+      <div class="content">
+        <div class="top">
+          <div class="top-left">
+            <img id="mainVideo" src="{{ url_for('video_feed',tag_id='general') }}" alt="">
+          </div>
+          <div class="top-right">
+            <div class="col1"></div>
+            <div class="col2">
+              <img id="general" src="{{ url_for('video_feed',tag_id='general') }}" alt="">
+            </div>
+            <div class="col3">
+              <img id="GAN" src="{{ url_for('video_feed',tag_id='GAN') }}" alt="">
+            </div>
+            <div class="col4">
+              <img id="template" src="{{ url_for('video_feed',tag_id='template') }}" alt="">
+            </div>
+          </div>
+        </div>
+        <div class="bottom">
+          <div class="bottom-left">
+            <div class="row">
+            </div>
+            <div class="row"></div>
+            <div class="row"></div>
+            <div class="row"></div>
+            <div class="row"></div>
+          </div>
+          <div class="bottom-right">
+            <div></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div>
-      <img id="mainVideo" src="{{ url_for('video_feed') }}" />
-      <img id="mainVideo" src="{{ url_for('video_feed') }}" />
-      <img id="mainVideo" src="{{ url_for('video_feed') }}" />
-    </div>
-    <img id="mainVideo" src="{{ url_for('video_feed') }}" />
-    <img id="mainVideo" src="{{ url_for('video_feed') }}" />
-    <img id="mainVideo" src="{{ url_for('video_feed') }}" />
   </body>
 </html>

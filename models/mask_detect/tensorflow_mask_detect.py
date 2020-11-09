@@ -82,11 +82,12 @@ def inference(image,
                 color = (0, 255, 0)
             else:
                 color = (255, 0, 0)
+                output_info.append([xmin, ymin, xmax, ymax])
             cv2.rectangle(image, (xmin, ymin), (xmax, ymax), color, 2)
             cv2.putText(image, "%s: %.2f" % (id2class[class_id], conf), (xmin + 2, ymin - 2),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.8, color)
         #output_info.append([class_id, conf, xmin, ymin, xmax, ymax])
-        output_info.append([xmin, ymin, xmax, ymax])
+        
        
         result+=class_id
          
