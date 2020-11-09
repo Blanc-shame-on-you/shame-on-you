@@ -1,10 +1,20 @@
 <html>
   <head>
     <title>Shame-on-you</title>
-    <link rel="stylesheet" href="./index.css">
+    <link href="{{ url_for('static', filename='index.css') }}" rel="stylesheet">
+      <script src="{{ url_for('static', filename='script.js') }}" />
   </head>
   <body>
-    <h1>Shame-on-you</h1>
-    <img src="{{ url_for('video_feed') }}" />
+    <div class="modes">
+      <img id="mainVideo" src="{{url_for('video_feed')}}" alt="">
+    </div>
+    <div>
+      <img id="mainVideo" src="{{ url_for('video_feed') }}" />
+      <img id="mainVideo" src="{{ url_for('video_feed') }}" />
+      <img id="mainVideo" src="{{ url_for('video_feed') }}" />
+    </div>
+    <img id="mainVideo" src="{{ url_for('video_feed') }}" />
+    <img id="mainVideo" src="{{ url_for('video_feed') }}" />
+    <img id="mainVideo" src="{{ url_for('video_feed') }}" />
   </body>
 </html>
