@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 from threading import Thread
 import sqlite3
-
+from models.main import detect, original, cycleGan
 
 app = Flask(__name__)
 
@@ -19,37 +19,36 @@ def index():
 def generate(tag_id):
     # General OpenCV Mode
     if tag_id == "general":
-        while True:
-            try:
-                res = requests.get("http://{}:5000/".format(client_ip)).content
-                # OpenCV Bbox
-                yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
-            except Exception as err:
-                print("ERROR MSG:[{}]".format(err))
+        while True:            
+            res = requests.get("http://{}:5000/".format(client_ip)).content
+            decoded = cv2.imdecode(np.frombuffer(res, np.uint8), -1)
+            result = original(decoded)
+            res = cv2.imencode('.jpg', result)[1].tobytes()
+            yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
     # Cycle GAN Mode
     elif tag_id == "GAN":
         while True:
-            try:
-                res = requests.get("http://{}:5000/".format(client_ip)).content
-                # Adapt Cycle GAN
-                yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
-            except Exception as err:
-                print("ERROR MSG:[{}]".format(err))
+           
+            res = requests.get("http://{}:5000/".format(client_ip)).content
+            decoded = cv2.imdecode(np.frombuffer(res, np.uint8), -1)
+            result = cycleGan(decoded)
+            res = cv2.imencode('.jpg', result)[1].tobytes()
+            yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
     # template mode
     elif tag_id == "template":
         while True:
-            try:
-                res = requests.get("http://{}:5000/".format(client_ip)).content
-                # Adapt template Mode
-                yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
-            except Exception as err:
-                print("ERROR MSG:[{}]".format(err))
+            res = requests.get("http://{}:5000/".format(client_ip)).content
+            decoded = cv2.imdecode(np.frombuffer(res, np.uint8), -1)
+            result = detect(decoded)
+            res = cv2.imencode('.jpg', result)[1].tobytes()
+            yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
+           
 
 
 @app.route("/video_feed/<string:tag_id>")
 def video_feed(tag_id):
     # 요청을 보냈던 client의 Ip로 이미지 수신
-    x=Thread(target=generate,args=(tag_id)).start()
+    x=Thread(target=generate,args=(tag_id,)).start()
     return Response(generate(tag_id), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 # @app.route('/people'):
