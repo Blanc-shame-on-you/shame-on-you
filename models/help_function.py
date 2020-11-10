@@ -3,7 +3,7 @@ from PIL import Image
 import torchvision.transforms as transforms
 from abc import ABC, abstractmethod
 from torch.nn import init
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 import time
 import numpy as np
 
@@ -51,10 +51,6 @@ def get_transform( params=None, grayscale=False, method=Image.BICUBIC, convert=T
     else:
         transform_list.append(transforms.Lambda(lambda img: __crop(img, params['crop_pos'], 256)))
 
-    if params is None:
-        transform_list.append(transforms.RandomHorizontalFlip())
-        '''elif params['flip']:
-            transform_list.append(transforms.Lambda(lambda img: __flip(img, params['flip'])))'''
 
     transform_list += [transforms.ToTensor()]
     transform_list += [transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]

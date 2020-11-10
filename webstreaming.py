@@ -19,30 +19,38 @@ def index():
 def generate(tag_id):
     # General OpenCV Mode
     if tag_id == "general":
-        while True:            
-            res = requests.get("http://{}:5000/".format(client_ip)).content
-            decoded = cv2.imdecode(np.frombuffer(res, np.uint8), -1)
-            result = original(decoded)
-            res = cv2.imencode('.jpg', result)[1].tobytes()
-            yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
+        while True:
+            try:
+                res = requests.get("http://{}:5000/".format(client_ip)).content
+                decoded = cv2.imdecode(np.frombuffer(res, np.uint8), -1)
+                result = original(decoded)
+                res = cv2.imencode('.jpg', result)[1].tobytes()
+                yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
+            except Exception as err:
+                print("ERROR MSG = [{}]".format(err))
     # Cycle GAN Mode
     elif tag_id == "GAN":
         while True:
-           
-            res = requests.get("http://{}:5000/".format(client_ip)).content
-            decoded = cv2.imdecode(np.frombuffer(res, np.uint8), -1)
-            result = cycleGan(decoded)
-            res = cv2.imencode('.jpg', result)[1].tobytes()
-            yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
+            try:
+                res = requests.get("http://{}:5000/".format(client_ip)).content
+                decoded = cv2.imdecode(np.frombuffer(res, np.uint8), -1)
+                result = cycleGan(decoded)
+                res = cv2.imencode('.jpg', result)[1].tobytes()
+                yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
+
+            except Exception as err:
+                print("ERROR MSG = [{}]".format(err))
     # template mode
     elif tag_id == "template":
         while True:
-            res = requests.get("http://{}:5000/".format(client_ip)).content
-            decoded = cv2.imdecode(np.frombuffer(res, np.uint8), -1)
-            result = detect(decoded)
-            res = cv2.imencode('.jpg', result)[1].tobytes()
-            yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
-           
+           try:
+               res = requests.get("http://{}:5000/".format(client_ip)).content
+               decoded = cv2.imdecode(np.frombuffer(res, np.uint8), -1)
+               result = detect(decoded)
+               res = cv2.imencode('.jpg', result)[1].tobytes()
+               yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
+           except Exception as err:
+               print("ERROR MSG = [{}]".format(err))
 
 
 @app.route("/video_feed/<string:tag_id>")

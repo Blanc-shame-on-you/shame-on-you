@@ -1,15 +1,14 @@
 import os
 import cv2 
 import numpy 
-import os
-import cv2 
+import os 
 
 def bitOperation(locations,img1):
   img2 = cv2.imread(os.getcwd().replace('\\','/')+'/models/virus.png')
-  for x2,y2,x1,y1 in locations:
+  for x2,x1,y2,y1 in locations:
     if x2-x1 > y2-y1:
-      img2 = cv2.resize(img2, dsize=(x2-x1, x2-x1), interpolation=cv2.INTER_AREA)
-      #img2 = cv2.resize(img2, dsize=(x2-x1, x2-x1), interpolation=cv2.INTER_AREA)
+      #img2 = cv2.resize(img2, dsize=(x1-x2, x1-x2), interpolation=cv2.INTER_AREA)
+      img2 = cv2.resize(img2, dsize=(x2-x1,x2-x1), interpolation=cv2.INTER_AREA)
     else:
       img2 = cv2.resize(img2, dsize=(y2-y1, y2-y1), interpolation=cv2.INTER_AREA)
 

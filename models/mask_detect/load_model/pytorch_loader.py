@@ -1,6 +1,6 @@
 import sys
 import torch
-sys.path.append('models/')
+sys.path.append('/home/gpuadmin/shame-on-you/models/mask_detect/models/')
 
 def load_pytorch_model(model_path):
     model = torch.load(model_path)
@@ -11,6 +11,7 @@ def pytorch_inference(model, img_arr):
         dev = 'cuda:0'
     else:
         dev = 'cpu'
+    print(dev)
     device = torch.device(dev)
     model.to(device)
     input_tensor = torch.tensor(img_arr).float().to(device)

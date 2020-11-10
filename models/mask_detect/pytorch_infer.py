@@ -11,7 +11,7 @@ from utils.nms import single_class_non_max_suppression
 from load_model.pytorch_loader import load_pytorch_model, pytorch_inference
 
 # model = load_pytorch_model('models/face_mask_detection.pth');
-model = load_pytorch_model('models/model360.pth');
+model = load_pytorch_model('/home/gpuadmin/shame-on-you/models/mask_detect/models/model360.pth');
 # anchor configuration
 #feature_map_sizes = [[33, 33], [17, 17], [9, 9], [5, 5], [3, 3]]
 feature_map_sizes = [[45, 45], [23, 23], [12, 12], [6, 6], [4, 4]]
@@ -31,10 +31,9 @@ id2class = {0: 'Mask', 1: 'NoMask'}
 def inference(image,
               conf_thresh=0.5,
               iou_thresh=0.4,
-              target_shape=(160, 160),
+              target_shape=(360, 360),
               draw_result=True,
-              show_result=True
-              ):
+              show_result=False):
     '''
     Main function of detection inference
     :param image: 3D numpy array of image
@@ -45,6 +44,7 @@ def inference(image,
     :param show_result: whether to display the image.
     :return:
     '''
+    result=0
     # image = np.copy(image)
     output_info = []
     height, width, _ = image.shape
@@ -84,14 +84,16 @@ def inference(image,
                 color = (0, 255, 0)
             else:
                 color = (255, 0, 0)
+                output_info.append([xmin,ymin,xmax,ymax])
             cv2.rectangle(image, (xmin, ymin), (xmax, ymax), color, 2)
             cv2.putText(image, "%s: %.2f" % (id2class[class_id], conf), (xmin + 2, ymin - 2),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.8, color)
-        output_info.append([class_id, conf, xmin, ymin, xmax, ymax])
+        #output_info.append([xmin, ymin, xmax, ymax])
+        result+=class_id
 
     if show_result:
         Image.fromarray(image).show()
-    return output_info
+    return result,output_info
 
 
 def run_on_video(video_path, output_video_name, conf_thresh):

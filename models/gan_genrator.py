@@ -26,9 +26,9 @@ for key in list(state.keys()):  # need to copy keys here because we mutate in lo
 
 generator.load_state_dict(state)
 
-#device = torch.device("cuda")
+device = torch.device("cuda")
 #gpu 위에꺼 cpu 아래꺼
-device = torch.device("cpu")
+#device = torch.device("cpu")
 generator.to(device)
 
 transform=get_transform()

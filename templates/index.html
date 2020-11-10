@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shame-on-you</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
     <script>
       
     </script>
@@ -13,23 +13,17 @@
     <div class="warp">
       <div class="content">
         <div class="top">
-          <div class="top-left">
-            <img id="mainVideo" src="{{ url_for('video_feed',tag_id='general') }}" alt="">
-          </div>
+
+            <img class="top-left" id="mainVideo" src="{{ url_for('video_feed',tag_id='general') }}" alt="">
+       
           <div class="top-right">
             <div class="col1">
               Shame-on-you
             </div>
-            <div class="col2">
-              <img id="general" src="{{ url_for('video_feed',tag_id='general') }}" alt="">
-            </div>
-            <div class="col3">
-              <img id="GAN" src="{{ url_for('video_feed',tag_id='GAN') }}" alt="">
-            </div>
-            <div class="col4">
-              <img id="template" src="{{ url_for('video_feed',tag_id='template') }}" alt="">
-            </div>
-          </div>
+	    <img class="col2"  id="general" src="{{ url_for('video_feed',tag_id='general') }}" alt="">
+	    <img class="col3"  id="GAN" src="{{ url_for('video_feed',tag_id='GAN') }}" alt="">
+	    <img class="col4"  id="template" src="{{ url_for('video_feed',tag_id='template') }}" alt="">
+         </div>
         </div>
         <div class="bottom">
           <div class="bottom-left">
