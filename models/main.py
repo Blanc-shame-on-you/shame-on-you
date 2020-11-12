@@ -1,6 +1,7 @@
 import sys
 import os
-sys.path.append('/home/gpuadmin/shame-on-you/models/mask_detect/')
+model_path = ['/home/gpuadmin/shame-on-you/models/mask_detect/']
+sys.path.append(model_path[0])
 #from tensorflow_mask_detect import inference
 from pytorch_infer import inference
 from .convention import bitOperation
