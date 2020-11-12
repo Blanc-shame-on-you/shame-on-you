@@ -1,7 +1,15 @@
+import platform
 import sys
-import os
-model_path = ['/home/gpuadmin/shame-on-you/models/mask_detect/']
-sys.path.append(model_path[0])
+
+model_path = ['/home/gpuadmin/shame-on-you/models/mask_detect/', 'C:/workspace/2020_kdn/shame-on-you/models/mask_detect/']
+def choose_path():
+    if platform.system() == 'Windows':
+        return model_path[1]
+    elif platform.system() == 'Linux':
+        return model_path[0]
+
+
+sys.path.append(choose_path())
 from tensorflow_mask_detect import inference
 #from pytorch_infer import inference
 from .convention import bitOperation
@@ -19,6 +27,8 @@ import cv2
     - 이미지 크롭 및 붙이기
 □스트리밍 서비스 연결
 '''
+
+
 def detect(img_raw):
     start=time.time()
     #temp_img=img_raw.copy()

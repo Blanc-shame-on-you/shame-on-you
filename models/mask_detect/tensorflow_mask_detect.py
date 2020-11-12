@@ -2,6 +2,7 @@
 import cv2
 import time
 import argparse
+import platform
 
 import numpy as np
 from PIL import Image
@@ -11,7 +12,14 @@ from utils.anchor_decode import decode_bbox
 from utils.nms import single_class_non_max_suppression
 from load_model.tensorflow_loader import load_tf_model, tf_inference
 
-sess, graph = load_tf_model('/home/gpuadmin/shame-on-you/models/mask_detect/models/face_mask_detection.pb')
+model_path = ['/home/gpuadmin/shame-on-you/models/mask_detect/models/face_mask_detection.pb', 'C:/workspace/2020_kdn/shame-on-you/models/mask_detect/models/face_mask_detection.pb']
+def choose_path():
+    if platform.system() == 'Windows':
+        return model_path[1]
+    elif platform.system() == 'Linux':
+        return model_path[0]
+
+sess, graph = load_tf_model(choose_path())
 # anchor configuration
 feature_map_sizes = [[33, 33], [17, 17], [9, 9], [5, 5], [3, 3]]
 anchor_sizes = [[0.04, 0.056], [0.08, 0.11], [0.16, 0.22], [0.32, 0.45], [0.64, 0.72]]

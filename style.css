@@ -52,7 +52,7 @@
 }
 
 .col1 {
-  height: 17%;
+  height: 18%;
   width: 100%;
   display: flex;
   align-items: center;
@@ -84,12 +84,5 @@
 .row {
   height: 100%;
   width: 25%;
-  background-color: #919191;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-#mainVideo {
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-color: #969696;
 }
