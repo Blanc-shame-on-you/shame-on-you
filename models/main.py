@@ -30,7 +30,9 @@ def detect(img_raw):
     else:
         print('else')
         return img_raw
-
+def mask_detection(img_raw):
+    result, locations = inference(img_raw)
+    return result > 0
 
 def original(img_raw):
     start=time.time()

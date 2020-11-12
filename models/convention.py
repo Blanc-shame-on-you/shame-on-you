@@ -5,7 +5,7 @@ import os
 
 def bitOperation(locations,img1):
   img2 = cv2.imread(os.getcwd().replace('\\','/')+'/models/virus.png')
-  for x2,x1,y2,y1 in locations:
+  for x1,y1,x2,y2 in locations:
     if x2-x1 > y2-y1:
       #img2 = cv2.resize(img2, dsize=(x1-x2, x1-x2), interpolation=cv2.INTER_AREA)
       img2 = cv2.resize(img2, dsize=(x2-x1,x2-x1), interpolation=cv2.INTER_AREA)
@@ -19,8 +19,8 @@ def bitOperation(locations,img1):
 
     rows, cols = img2.shape[:2] # 바이러스 이미지의 가로, 세로 
 
-    vpos = x1
-    hpos = y1    
+    vpos = y1
+    hpos = x1    
 
     roi = img1[vpos:rows+vpos, hpos:cols+hpos]
 

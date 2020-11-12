@@ -30,7 +30,7 @@ id2class = {0: 'Mask', 1: 'NoMask'}
 
 def inference(image,
               conf_thresh=0.5,
-              iou_thresh=0.4,
+              iou_thresh=0.5,
               target_shape=(360, 360),
               draw_result=True,
               show_result=False):

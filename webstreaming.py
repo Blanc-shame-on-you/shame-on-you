@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 from threading import Thread
 import sqlite3
-from models.main import detect, original, cycleGan
+from models.main import mask_detection, detect, original, cycleGan
 
 app = Flask(__name__)
 
@@ -23,6 +23,8 @@ def generate(tag_id):
             try:
                 res = requests.get("http://{}:5000/".format(client_ip)).content
                 decoded = cv2.imdecode(np.frombuffer(res, np.uint8), -1)
+                isWear = mask_detection(decoded)
+                res2 = requests.get("http://{}:5000/isWear?isWear={}".format(client_ip, isWear))
                 result = original(decoded)
                 res = cv2.imencode('.jpg', result)[1].tobytes()
                 yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
