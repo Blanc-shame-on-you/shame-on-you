@@ -22,25 +22,18 @@ template.onclick = () => {
 };
 
 //3초뒤 실행
-setInterval(()=> {
-  var firstImage = getElementById('firstRow')
-  var secondImage = getElementById('secondImage')
-  var thirdImage = getElementById('thirdImage')
-  var fourthImage = getElementById('fourthImage')
-  var fifthImage = getElementById('fifthImage')
+setInterval(() => {
+  var firstRow = getElementById("firstRow");
+  var secondRow = getElementById("secondRow");
+  var thirdRow = getElementById("thirdRow");
+  var fourthRow = getElementById("fourthRow");
+  var fifthRow = getElementById("fifthRow");
 
-  $.ajax({
-    url: "http://localhost:5000/getData/",
-    type: "GET",
-    success: (res) => {
-      if (res) {
-        
-      } else{
-        console.log('Fail') 
-      }
-    }
-  })
-})
+  fetch("http://10.120.72.244:5000/getData").then((res) => {
+    res_json = res.json();
+    res_json["data"]["img"];
+  });
+});
 
 setTimeout(() => {
   firstRow.style.backgroundImage = "url(./img/small_black.png)";
