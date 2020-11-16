@@ -10,18 +10,38 @@ const thirdRow = document.getElementById("thirdRow");
 
 //클릭시 객체의 스타일을 변경
 general.onclick = () => {
-  mainVideo.style.backgroundImage = "url(./img/black.png)";
+  mainVideo.src = "{{ url_for('video_feed', tag_id='general') }}";
 };
 
 GAN.onclick = () => {
-  mainVideo.style.backgroundImage = "url(./img/icefirebear.png)";
+  mainVideo.src = "{{ url_for('video_feed', tag_id='GAN') }}";
 };
 
 template.onclick = () => {
-  mainVideo.style.backgroundImage = "url(./img/jangun.png)";
+  mainVideo.src = "{{ url_for('video_feed', tag_id='template') }}";
 };
 
 //3초뒤 실행
+setInterval(()=> {
+  var firstImage = getElementById('firstRow')
+  var secondImage = getElementById('secondImage')
+  var thirdImage = getElementById('thirdImage')
+  var fourthImage = getElementById('fourthImage')
+  var fifthImage = getElementById('fifthImage')
+
+  $.ajax({
+    url: "http://localhost:5000/getData/",
+    type: "GET",
+    success: (res) => {
+      if (res) {
+        
+      } else{
+        console.log('Fail') 
+      }
+    }
+  })
+})
+
 setTimeout(() => {
   firstRow.style.backgroundImage = "url(./img/small_black.png)";
 }, 1000);

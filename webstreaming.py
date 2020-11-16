@@ -8,12 +8,12 @@ from models.main import mask_detection, detect, original, cycleGan
 
 app = Flask(__name__)
 
-
 @app.route("/")
 def index():
-    global client_ip
+    global rtsp_url
     # 접속한 라즈베리파이의 IP 저장
     client_ip = request.environ.get("HTTP_X_REAL_IP", request.remote_addr)
+    rtsp_url = "rtsp://{}:8554/live/stream".format(rtsp_url)
     return render_template("index.html")
 
 def generate(tag_id):
@@ -21,10 +21,8 @@ def generate(tag_id):
     if tag_id == "general":
         while True:
             try:
-                res = requests.get("http://{}:5000/".format(client_ip)).content
+                res = cv2.VideoCapture(rtsp_url)
                 decoded = cv2.imdecode(np.frombuffer(res, np.uint8), -1)
-                isWear = mask_detection(decoded)
-                res2 = requests.get("http://{}:5000/isWear?isWear={}".format(client_ip, isWear))
                 result = original(decoded)
                 res = cv2.imencode('.jpg', result)[1].tobytes()
                 yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
@@ -34,7 +32,7 @@ def generate(tag_id):
     elif tag_id == "GAN":
         while True:
             try:
-                res = requests.get("http://{}:5000/".format(client_ip)).content
+                res = cv2.VideoCapture(rtsp_url)
                 decoded = cv2.imdecode(np.frombuffer(res, np.uint8), -1)
                 result = cycleGan(decoded)
                 res = cv2.imencode('.jpg', result)[1].tobytes()
@@ -44,15 +42,17 @@ def generate(tag_id):
                 print("ERROR MSG = [{}]".format(err))
     # template mode
     elif tag_id == "template":
+
         while True:
-           try:
-               res = requests.get("http://{}:5000/".format(client_ip)).content
-               decoded = cv2.imdecode(np.frombuffer(res, np.uint8), -1)
-               result = detect(decoded)
-               res = cv2.imencode('.jpg', result)[1].tobytes()
-               yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
-           except Exception as err:
-               print("ERROR MSG = [{}]".format(err))
+
+            try:                
+                res = cv2.VideoCapture(rtsp_url)
+                decoded = cv2.imdecode(np.frombuffer(res, np.uint8), -1)
+                result = detect(decoded)
+                res = cv2.imencode('.jpg', result)[1].tobytes()
+                yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
+            except Exception as err:
+                print("ERROR MSG = [{}]".format(err))
 
 
 @app.route("/video_feed/<string:tag_id>")
@@ -61,22 +61,22 @@ def video_feed(tag_id):
     x=Thread(target=generate,args=(tag_id,)).start()
     return Response(generate(tag_id), mimetype="multipart/x-mixed-replace; boundary=frame")
 
-# @app.route('/people'):
-# def select_people():
-#     conn = sqlite3.connect("people.db")
 
-#     cur = conn.cursor():
-#     cur.execute("SELECT * FROM people ORDER BY time")
-#     rows = cur.fetchall()
-#     cur.close()
-#     data = []
-#     for idx, row in enumerate(rows):
-#         if idx > 3:
-#             break
-#         data.append(row)
+@app.route('/getData'):
+def get_people_data():
+    conn = sqlite3.connect("people.db")
+
+    cur = conn.cursor():
+    cur.execute("SELECT * FROM people ORDER BY time")
+    rows = cur.fetchall()
+    cur.close()
+    data = []
+    for idx, row in enumerate(rows):
+        if idx > 5:
+            break
+        data.append(row)
         
-#     return Response(people_data=data)
-
+    return Response(data)
 
 
 if __name__ == "__main__":

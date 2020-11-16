@@ -21,15 +21,15 @@
 
       //클릭시 객체의 스타일을 변경
       general.onclick = () => {
-        mainVideo.style.backgroundImage = "url(./img/black.png)";
+        mainVideo.src = "{{ url_for('video_feed', tag_id='general') }}"
       };
 
       GAN.onclick = () => {
-        mainVideo.style.backgroundImage = "url(./img/icefirebear.png)";
+        mainVideo.src = "{{ url_for('video_feed', tag_id='GAN') }}"
       };
 
       template.onclick = () => {
-        mainVideo.style.backgroundImage = "url(./img/jangun.png)";
+        mainVideo.src = "{{ url_for('video_feed', tag_id='template') }}"
       };
 
       //3초뒤 실행
