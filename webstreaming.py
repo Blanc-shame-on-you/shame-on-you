@@ -23,7 +23,7 @@ def get_frame():
 @app.route("/")
 def index(): 
     return render_template("index.html")
-
+    
 def generate(tag_id):
     # General OpenCV Mode
     #global frame
@@ -32,7 +32,7 @@ def generate(tag_id):
         while True:
             try:
                 #decoded = cv2.imdecode(np.frombuffer(frame, np.uint8), -1)
-                result = original(frame)
+                result = original(frame.copy())
                 res = cv2.imencode('.jpg', result)[1].tobytes()
                 yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
             except Exception as err:
@@ -42,7 +42,7 @@ def generate(tag_id):
         while True:
             try:
             #ecoded = cv2.imdecode(np.frombuffer(frame, np.uint8), -1)
-                result = cycleGan(frame)
+                result = cycleGan(frame.copy())
                 res = cv2.imencode('.jpg', result)[1].tobytes()
                 yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
 
@@ -52,8 +52,8 @@ def generate(tag_id):
     elif tag_id == "template":
         while True:
             try:
-            #decoded = cv2.imdecode(np.frombuffer(frame, np.uint8), -1)
-                result = detect(frame)
+                #decoded = cv2.imdecode(np.frombuffer(frame, np.uint8), -1)
+                result = detect(frame.copy())
                 res = cv2.imencode('.jpg', result)[1].tobytes()
                 yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + res + b"\r\n")
             except Exception as err:
