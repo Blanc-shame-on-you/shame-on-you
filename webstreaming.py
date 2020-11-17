@@ -1,4 +1,5 @@
 from flask import Flask, render_template, Response, request
+import json
 import requests
 import cv2
 import numpy as np
@@ -82,8 +83,8 @@ def get_people_data():
         if idx > 5:
             break
         data.append(row)
-        
-    return Response(data)
+    data = { "data" : data}
+    return Response( json(data) )
 
 
 if __name__ == "__main__":
