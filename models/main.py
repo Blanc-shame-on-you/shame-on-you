@@ -1,6 +1,6 @@
 import platform
 import sys
-
+import db
 model_path = ['/home/gpuadmin/shame-on-you/models/mask_detect/', 'C:/workspace/2020_kdn/shame-on-you/models/mask_detect/']
 def choose_path():
     if platform.system() == 'Windows':
@@ -46,8 +46,10 @@ def mask_detection(img_raw):
     return result > 0
 
 def original(img_raw):
+    cursor=db.setting()
     start=time.time()
     result, locations =inference(img_raw)
+    db.crop_and_save(img_raw,locations,cursor)
     print("original time{}".format(start-time.time()))
     return img_raw 
 

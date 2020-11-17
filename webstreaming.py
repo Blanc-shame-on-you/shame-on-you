@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 from threading import Thread
 import sqlite3
-from models.main import mask_detection, detect, original, cycleGan
+from models.main import mask_detection, detect, original, cycleGan, db
 
 CAM_IP = '10.120.73.197'
 rtsp_url = "rtsp://{}:8554/live/stream".format(CAM_IP)
@@ -73,7 +73,6 @@ def video_feed(tag_id):
 @app.route('/getData')
 def get_people_data():
     conn = sqlite3.connect("people.db")
-
     cur = conn.cursor()
     cur.execute("SELECT * FROM people ORDER BY time")
     rows = cur.fetchall()
@@ -84,9 +83,9 @@ def get_people_data():
             break
         data.append(row)
     data = { "data" : data}
+    
     return Response( json(data) )
 
 
 if __name__ == "__main__":
-    
     app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
