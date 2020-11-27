@@ -25,7 +25,7 @@ template.onclick = () => {
   mainVideo.src = "{{ url_for('video_feed', tag_id='template') }}";
 };
 
-//3초뒤 실행
+//1초에 한 번씩 초기화
 setInterval(() => {
   fetch("http://10.120.72.244:5000/getData").then((res) => {
     res_json = res.json()["data"];

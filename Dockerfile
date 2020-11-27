@@ -1,11 +1,16 @@
-FROM python:3.7
+FROM ubuntu:18.04
 
 RUN apt-get update
+RUN apt-get install -y python3
+RUN apt-get install -y python3-venv
 
 RUN mkdir /shame-on-you
+RUN cd /shame-on-you
 WORKDIR /shame-on-you
 
 ## install packages
+RUN python3 -m venv venv
+RUN source venv/bin/activate
 RUN pip install -r requirements.txt
 
 ADD . /shame-on-you/

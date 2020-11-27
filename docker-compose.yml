@@ -1,4 +1,4 @@
-version: "3" # Docker-Compose 버전 2 사용.
+version: "3" # Docker-Compose 버전 2=3 사용.
 services: # 컨테이너별 서비스 정의.
   web: # 웹서버 부분.
     build: . # 현 위치의 DockerFile을 사용해 이미지 빌드.
